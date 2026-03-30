@@ -23,5 +23,6 @@ Base.metadata.create_all(engin) -> This will consider the classes which you have
 
 user1=User(column1="", column2="")  
 
+### Create
 session.add(user1) -> Add only mentioned object into the table  
 session.add_all([user1, user2, user3]) -> Add the mentioned users into the table  
