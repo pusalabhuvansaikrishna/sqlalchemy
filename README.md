@@ -2,7 +2,7 @@
 Commands of SQLAlchemy
 
 
-**from sqlalchemy import create_engine, Integer, Column, String**  
+**from sqlalchemy import create_engine, Integer, Column, String, or_, and_,not_, func**  
 **from sqlalchemy.orm import sessionmaker, relationship, declarative_base**  
 
 database_url="<db_provider_name>://<username>:<password>@localhost:5432/<db_name>"  
@@ -49,4 +49,18 @@ users=session.query(User).order_by(User.age).all() -> This will order the result
 users=session.query(User).order_by(User.age.desc()).all() -> This will order the results and provide the answer in descending order.  
 users=session.query(User).order_by(User.age, User.name).all() -> This will first order the results based on age, If there are multiple records with same values then among those values it will order it by name.  
 
+### Filtering Data
+users=session.query(User).filter(User.age>=25).all()  
+users=session.query(User).filter(User.age>=25, User.name=="Ironman").all() -> This bydefault use the and condition.  
+users=session.query(User).filter(and_(User.age>=30, User.name=="Ironman", User.id>4)).all()  
+users=session.query(User).filter(or_(User.age>=20, User.name=="Ironman")).all() -> Same as above but not the condition is or.  
+users=session.query(User).filter((User.age>=20)|(User.name=="Ironman")).all() -> Same as above but not with or_ function.  
+users=session.query(User).filter_by(age=25).all() -> this filter_by will only works for equal to operation, not for others. and the parameter (eg: age) must be working, not like User.age  
 
+### Group by
+users=session.query(User).group_by(User.age).all()  
+users=session.query(User.age, func.count(User.id)).group_by(User.age).all()  
+
+
+### Chaining
+users=session.query(User).filter(User.age>20).filter(User.age<58).all()  
